@@ -9,12 +9,14 @@ Maintainer:	a.j.delaney@brighton.ac.uk
 Category:	Automata Theory
 Synopsis:	A regular expression and automata library.
 Build-Type:	Simple
+Tested-With:    GHC == 9.0.1
+
 extra-source-files: src/Language/Mira/RegExpParser.y
 
 Library
   Build-Depends:	base < 5
-                      , containers < 0.3
-                      , QuickCheck >= 2 && < 2.2
+                      , containers < 0.7
+                      , QuickCheck >= 2 && < 2.15
                       , array >= 0.2.0
   Build-Tools:	      happy >= 1.18
   hs-source-dirs:     src
