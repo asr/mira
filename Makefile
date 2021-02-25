@@ -1,8 +1,6 @@
-file = ptt
 
-$(file) : $(file).tex
-	latexmk $<
-	latex-werror $(file).log
+install :
+	cabal v1-install
 
 fix-whitespaces-issues :
 	fix-whitespace
@@ -11,7 +9,4 @@ check-whitespaces-issues :
 	fix-whitespace --check
 
 clean :
-	latexmk -C
-	rm -r -f auto/
-	rm -f $(file).bbl
-	rm -f $(file).run.xml
+	cabal v1-clean
