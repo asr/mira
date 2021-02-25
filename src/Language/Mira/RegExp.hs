@@ -1,28 +1,28 @@
 
--------------------------------------------------------------------------- 
---									--
---	RegExp.hs							--
---									--
---	A type of regular expressions.					--
---									--
---	(c) Simon Thompson, 1995, 2000					--
---									--
--------------------------------------------------------------------------- 
+--------------------------------------------------------------------------
+--                                                                      --
+--      RegExp.hs                                                       --
+--                                                                      --
+--      A type of regular expressions.                                  --
+--                                                                      --
+--      (c) Simon Thompson, 1995, 2000                                  --
+--                                                                      --
+--------------------------------------------------------------------------
 
 module Language.Mira.RegExp where
 
 data Reg = Epsilon |
-	   Literal Char |
-	   Or Reg Reg |
-	   And Reg Reg |
-	   Then Reg Reg |
-	   Star Reg |
-	   Not Reg
+           Literal Char |
+           Or Reg Reg |
+           And Reg Reg |
+           Then Reg Reg |
+           Star Reg |
+           Not Reg
            deriving Eq
 
--------------------------------------------------------------------------- 
---	Definitions of ? and +						--
--------------------------------------------------------------------------- 
+--------------------------------------------------------------------------
+--      Definitions of ? and +                                          --
+--------------------------------------------------------------------------
 
 opt,plus :: Reg -> Reg
 
@@ -30,21 +30,21 @@ opt re = Or re Epsilon
 
 plus re = Then (Star re) re
 
--------------------------------------------------------------------------- 
---	Expanding a character range into a regular expression.		--
---									--
---	range 'a' 'c'							--
---	  = Or (Literal 'a') (Or (Literal 'b') (Literal 'c'))		--
--------------------------------------------------------------------------- 
+--------------------------------------------------------------------------
+--      Expanding a character range into a regular expression.          --
+--                                                                      --
+--      range 'a' 'c'                                                   --
+--        = Or (Literal 'a') (Or (Literal 'b') (Literal 'c'))           --
+--------------------------------------------------------------------------
 
 rangeChar :: Char -> Char -> Reg
 
 rangeChar c1 c2
       = foldr1 Or (map Literal [c1 .. c2])
 
--------------------------------------------------------------------------- 
---	Examples							--
--------------------------------------------------------------------------- 
+--------------------------------------------------------------------------
+--      Examples                                                        --
+--------------------------------------------------------------------------
 
 a = Literal 'a'
 b = Literal 'b'
@@ -56,10 +56,10 @@ regexp0 = Then b (Then (Star regexp2) a)
 regexp1 = Then a (Then (Star regexp2) b)
 regexp2 = Or (Then a b) (Then b a)
 
--------------------------------------------------------------------------- 
---	Which literals occur in a regular expression?			--
--------------------------------------------------------------------------- 
- 
+--------------------------------------------------------------------------
+--      Which literals occur in a regular expression?                   --
+--------------------------------------------------------------------------
+
 literals :: Reg -> [Char]
 
 literals Epsilon      = []
@@ -69,11 +69,11 @@ literals (And r1 r2)  = literals r1 ++ literals r2
 literals (Then r1 r2) = literals r1 ++ literals r2
 literals (Star r)     = literals r
 
--------------------------------------------------------------------------- 
---	Pretty printing a regular expression.				--
---									--
---	@ is used instead for the epsilon character.			--
--------------------------------------------------------------------------- 
+--------------------------------------------------------------------------
+--      Pretty printing a regular expression.                           --
+--                                                                      --
+--      @ is used instead for the epsilon character.                    --
+--------------------------------------------------------------------------
 
 instance Show Reg where
   show = printRE

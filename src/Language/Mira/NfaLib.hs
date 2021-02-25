@@ -1,15 +1,15 @@
 
--------------------------------------------------------------------------- 
---									--
---	NfaLib.hs							--
---									--
---	Useful functions used in the implementation of an NFA and	--
---	the conversion of an NFA to a DFA.				--
---	Therefore used in ImplementNfa and NfaToFDfa.			--
---									--
---	(c) Simon Thompson, 1995, 2000					--
---									--
--------------------------------------------------------------------------- 
+--------------------------------------------------------------------------
+--                                                                      --
+--      NfaLib.hs                                                       --
+--                                                                      --
+--      Useful functions used in the implementation of an NFA and       --
+--      the conversion of an NFA to a DFA.                              --
+--      Therefore used in ImplementNfa and NfaToFDfa.                   --
+--                                                                      --
+--      (c) Simon Thompson, 1995, 2000                                  --
+--                                                                      --
+--------------------------------------------------------------------------
 
 module Language.Mira.NfaLib where
 
@@ -28,17 +28,17 @@ closure :: Ord a => Nfa a -> Set a -> Set a
 
 closure (NFA states moves start term)
       = setlimit add
-	where
-	add stateset = union stateset (Set.fromList accessible)
-		       where
-		       accessible
-			 = [ s | x <- Set.toList stateset , 
-				 Emove y s <- Set.toList moves ,
-				 y==x ]
+        where
+        add stateset = union stateset (Set.fromList accessible)
+                       where
+                       accessible
+                         = [ s | x <- Set.toList stateset ,
+                                 Emove y s <- Set.toList moves ,
+                                 y==x ]
 
 setlimit :: Eq a => (Set a -> Set a) -> Set a -> Set a
 setlimit f s
-  | s==next	= s
+  | s==next     = s
   | otherwise   = setlimit f next
     where
     next = f s
@@ -48,9 +48,9 @@ setlimit f s
 onemove :: Ord a => Nfa a -> Char -> Set a -> Set a
 
 onemove (NFA states moves start term) c x
-      = Set.fromList [ s | t <- Set.toList x , 
-		      Move z d s <- Set.toList moves ,
-		      z==t , c==d ]
+      = Set.fromList [ s | t <- Set.toList x ,
+                      Move z d s <- Set.toList moves ,
+                      z==t , c==d ]
 
 -- | 'onetrans' performs one move (by onemove) and then takes the
 --   epsilon closure of the result.
@@ -64,6 +64,4 @@ alphabet :: Nfa a -> [Char]
 
 alphabet (NFA s moves st f)
   = nub [ c | Move s c t <- Set.toList moves ]
-
-
 
