@@ -1,24 +1,24 @@
-Name:		mira
-Version:	1.0
-Cabal-Version:	>=1.2
-License:	BSD3
-License-File:	LICENCE
-Author:		Simon J. Thompson
-Homepage:	http://www.cs.kent.ac.uk/people/staff/sjt/craft2e/regExp.html
-Maintainer:	a.j.delaney@brighton.ac.uk
-Category:	Automata Theory
-Synopsis:	A regular expression and automata library.
-Build-Type:	Simple
+Name:           mira
+Version:        1.0
+Cabal-Version:  >=1.2
+License:        BSD3
+License-File:   LICENCE
+Author:         Simon J. Thompson
+Homepage:       http://www.cs.kent.ac.uk/people/staff/sjt/craft2e/regExp.html
+Maintainer:     a.j.delaney@brighton.ac.uk
+Category:       Automata Theory
+Synopsis:       A regular expression and automata library.
+Build-Type:     Simple
 Tested-With:    GHC == 9.0.1
 
 extra-source-files: src/Language/Mira/RegExpParser.y
 
 Library
-  Build-Depends:	base < 5
+  Build-Depends:        base < 5
                       , containers < 0.7
                       , QuickCheck >= 2 && < 2.15
                       , array >= 0.2.0
-  Build-Tools:	      happy >= 1.18
+  Build-Tools:        happy >= 1.18
   hs-source-dirs:     src
   Exposed-modules:
     Language.Mira,
