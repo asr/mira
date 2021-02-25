@@ -1,6 +1,9 @@
 
 install :
-	cabal v1-install
+	cabal v1-install --enable-tests
+
+test :
+	cabal v1-test
 
 fix-whitespaces-issues :
 	fix-whitespace
