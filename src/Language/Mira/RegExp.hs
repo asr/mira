@@ -46,12 +46,15 @@ rangeChar c1 c2
 --      Examples                                                        --
 --------------------------------------------------------------------------
 
+a, b :: Reg
 a = Literal 'a'
 b = Literal 'b'
 
+rex1, rex2 :: Reg
 rex1 = a `Or` (a `Then` b)
 rex2 = (a `Then` b) `Or` (Epsilon `Or` (Star a))
 
+regexp0, regexp1, regexp2 :: Reg
 regexp0 = Then b (Then (Star regexp2) a)
 regexp1 = Then a (Then (Star regexp2) b)
 regexp2 = Or (Then a b) (Then b a)
@@ -68,6 +71,7 @@ literals (Or r1 r2)   = literals r1 ++ literals r2
 literals (And r1 r2)  = literals r1 ++ literals r2
 literals (Then r1 r2) = literals r1 ++ literals r2
 literals (Star r)     = literals r
+literals (Not r)      = literals r
 
 --------------------------------------------------------------------------
 --      Pretty printing a regular expression.                           --

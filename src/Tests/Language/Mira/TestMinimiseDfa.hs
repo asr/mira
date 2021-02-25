@@ -11,7 +11,6 @@
 module Language.Mira.TestMinimiseDfa
 where
 
-import Test.QuickCheck
 import Test.Framework
 import Test.Framework.Providers.QuickCheck2
 
@@ -21,8 +20,8 @@ import Language.Mira.ImplementNfa
 import Language.Mira.NfaToDfa
 import Language.Mira.NfaLib
 import Data.Set as Set
-import Data.List
 
+suite :: Test
 suite = testGroup "DFA minimisation"
           [ testProperty "minimised automaton accepts same strings"  prop_minimiseAccept,
           testProperty "a make_deterministic and an nfa accept the same strings" prop_deterministicAccept,
@@ -40,11 +39,11 @@ prop_minimiseDeterministic nfa = (minimise . minimise) nfa == minimise nfa
 
 prop_completeness :: Nfa Int -> Bool
 prop_completeness nfa =
-                  and [(is_transition_complete (moves d) sigma q)| q <- Set.toList (states d)]
+                  and [(is_transition_complete (movesNFA d) sigma q)| q <- Set.toList (statesNFA d)]
                   where
                   d =  make_deterministic nfa
-                  sigma = alphabet d
+                  sigma = alphabetNFA d
 
 is_transition_complete :: Set (Move a) -> [Char] -> Int -> Bool
-is_transition_complete moves alphabet state =
-                       (fromList alphabet) == (fromList [a | Move state a _ <- (toList moves)])
+is_transition_complete moves alphabet _ =
+                       (fromList alphabet) == (fromList [a | Move _ a _ <- (toList moves)])

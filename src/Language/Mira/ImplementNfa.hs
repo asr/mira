@@ -20,7 +20,6 @@ module Language.Mira.ImplementNfa where
 import qualified Data.Set as Set
 import Data.Set ( Set, singleton, intersection, empty )
 
-import Language.Mira.RegExp
 import Language.Mira.NfaTypes
 import Language.Mira.NfaLib
 
@@ -40,12 +39,12 @@ trans :: Ord a => Nfa a -> String -> Set a
 trans mach str = foldl step startset str
                  where
                  step set ch = onetrans mach ch set
-                 startset = closure mach (singleton (startstate mach))
+                 startset = closure mach (singleton (startstateNFA mach))
 
 -- | 'accepts' @mach str@ is @True@ if the automaton @mach@ accepts the
 --   string @str@
 accepts :: Ord a => Nfa a -> String -> Bool
-accepts mach str = not (empty == (trans mach str `intersection` finalstates mach))
+accepts mach str = not (empty == (trans mach str `intersection` finalstatesNFA mach))
 
 --------------------------------------------------------------------------
 --      Thanks are due to Sven Martin for pointing out the omission     --

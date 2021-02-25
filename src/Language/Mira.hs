@@ -10,7 +10,18 @@
 --                                                                      --
 --------------------------------------------------------------------------
 
-module Language.Mira where
+module Language.Mira
+  ( module Language.Mira.BuildNfa
+  , module Language.Mira.ImplementNfa
+  , module Language.Mira.MinimiseDfa
+  , module Language.Mira.NfaLib
+  , module Language.Mira.NfaToDfa
+  , module Language.Mira.NfaMisc
+  , module Language.Mira.NfaTypes
+  , module Language.Mira.RegExp
+  , module Language.Mira.RegExpParser
+  )
+where
 
 import Language.Mira.BuildNfa
 import Language.Mira.ImplementNfa

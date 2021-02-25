@@ -18,9 +18,8 @@
 module Language.Mira.NfaMisc where
 
 import qualified Data.Set as Set
-import Data.Set ( Set, union, singleton )
+import Data.Set ( Set, singleton )
 
-import Language.Mira.RegExp
 import Language.Mira.NfaTypes
 
 --------------------------------------------------------------------------

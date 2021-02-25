@@ -32,8 +32,8 @@
 
 module Language.Mira.NfaTypes where
 
+import Data.Set ( Set )
 import qualified Data.Set as Set
-import Data.Set ( Set, union )
 
 import Control.Monad ( ap, replicateM, filterM )
 import Test.QuickCheck (Arbitrary(..), sized, vector, oneof, elements)
@@ -41,10 +41,10 @@ import Test.QuickCheck (Arbitrary(..), sized, vector, oneof, elements)
 data Move a = Move a Char a | Emove a a
               deriving (Eq,Ord,Show)
 
-data Nfa a  = NFA { states :: Set a
-                  , moves :: Set (Move a)
-                  , startstate :: a
-                  , finalstates :: Set a
+data Nfa a  = NFA { statesNFA      :: Set a
+                  , movesNFA       :: Set (Move a)
+                  , startstateNFA  :: a
+                  , finalstatesNFA :: Set a
                   }
               deriving (Eq,Show)
 

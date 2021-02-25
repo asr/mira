@@ -20,10 +20,10 @@ module Language.Mira.NfaToDfa where
 import qualified Data.Set as Set
 import Data.Set ( Set, empty, intersection, singleton, union )
 
-import Language.Mira.RegExp
 import Language.Mira.NfaTypes
 import Language.Mira.NfaLib
 
+import Prelude hiding ( lookup )
 -- |    Conversion of an nfa produced by build to a dfa.
 --      Note that a ``dead'' state is produced by the process as
 --      implemented here.
@@ -44,10 +44,12 @@ number (NFA states moves start finish)
     where
     statelist = Set.toList states
     lookup l a = look 0 l a
-    look n [] a = error "lookup"
+
+    look _ [] _ = error "lookup"
     look n (b:y) a
       | (b==a)      = n
       | otherwise   = look (n+1) y a
+
     change = lookup statelist
     states' = Set.map change states
     moves'  = Set.map newmove moves
@@ -62,7 +64,7 @@ number (NFA states moves start finish)
 --   its alphabet.
 make_deter :: Nfa Int -> Nfa (Set Int)
 
-make_deter mach = deterministic mach (alphabet mach)
+make_deter mach = deterministic mach (alphabetNFA mach)
 
 -- | 'deterministic' @mach alpha@ is the result of forming the dfa based on
 -- sets of states of @mach@, using the alphabet @alpha@.
@@ -87,7 +89,7 @@ deterministic mach alpha
       finish
         | (term `intersection` starter) == empty     = empty
         | otherwise                           = singleton starter
-      (NFA sts mvs start term) = mach
+      (NFA _ _ start term) = mach
 
 -- | 'addstep' adds all the new states which can be made by a single
 -- transition on one of the characters of the alphabet.
@@ -96,10 +98,11 @@ addstep :: Nfa Int -> [Char] -> Nfa (Set Int) -> Nfa (Set Int)
 addstep mach alpha dfa
   = add_aux mach alpha dfa (Set.toList states)
     where
-    (NFA states m s f) = dfa
-    add_aux mach alpha dfa [] = dfa
-    add_aux mach alpha dfa (st:rest)
-        = add_aux mach alpha (addmoves mach st alpha dfa) rest
+    (NFA states _ _ _) = dfa
+
+    add_aux _ _ dfa' [] = dfa'
+    add_aux mach' alpha' dfa' (st:rest)
+        = add_aux mach' alpha' (addmoves mach' st alpha' dfa') rest
 
 -- | 'addmoves' @mach x alpha dfa@ will add to @dfa@ all the moves from
 --   state set @x@ over alphabet @alpha@.
@@ -107,7 +110,7 @@ addstep mach alpha dfa
 --   Defined by iterating 'addmove'.
 addmoves :: Nfa Int -> Set Int -> [Char] -> Nfa (Set Int) -> Nfa (Set Int)
 
-addmoves mach x [] dfa    = dfa
+addmoves _ _ [] dfa       = dfa
 
 addmoves mach x (c:r) dfa = addmoves mach x r (addmove mach x c dfa)
 
@@ -124,7 +127,7 @@ addmove mach x c (NFA states moves start finish)
      | empty /= (term `intersection` new)    = finish `union` singleton new
      | otherwise                      = finish
     new = onetrans mach c x
-    (NFA s m q term) = mach
+    (NFA _ _ _ term) = mach
 
 -- | 'nfa_limit' finds the limit of an nfa transforming function. Just like
 -- 'limit' except for the change of equality test.

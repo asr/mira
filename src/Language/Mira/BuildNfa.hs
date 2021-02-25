@@ -98,14 +98,14 @@ m_and n1 n2
       where
       n1' = make_deterministic n1
       n2' = make_deterministic n2
-      states1' = (Set.toList (states n1'))
-      states2' = (Set.toList (states n2'))
+      states1' = (Set.toList (statesNFA n1'))
+      states2' = (Set.toList (statesNFA n2'))
       cross_list = [(s1, s2) | s1 <- states1', s2 <- states2' ]
-      moves1' = (Set.toList (moves n1'))
-      moves2' = (Set.toList (moves n2'))
-      start =  indexOf (startstate n1', startstate n2') cross_list
-      finish1' = (Set.toList (finalstates n1'))
-      finish2' = (Set.toList (finalstates n2'))
+      moves1' = (Set.toList (movesNFA n1'))
+      moves2' = (Set.toList (movesNFA n2'))
+      start =  indexOf (startstateNFA n1', startstateNFA n2') cross_list
+      finish1' = (Set.toList (finalstatesNFA n1'))
+      finish2' = (Set.toList (finalstatesNFA n2'))
 
 m_then :: Nfa Int -> Nfa Int -> Nfa Int
 

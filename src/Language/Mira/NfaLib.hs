@@ -18,7 +18,6 @@ import qualified Data.Set as Set
 import Data.List hiding ( union )
 import Data.Set ( Set, union )
 
-import Language.Mira.RegExp
 import Language.Mira.NfaTypes
 
 -- | The epsilon closure of a set of states in an NFA. This is
@@ -26,7 +25,7 @@ import Language.Mira.NfaTypes
 --   set all those states accessible by a single epsilon move.
 closure :: Ord a => Nfa a -> Set a -> Set a
 
-closure (NFA states moves start term)
+closure (NFA _ moves _ _)
       = setlimit add
         where
         add stateset = union stateset (Set.fromList accessible)
@@ -47,7 +46,7 @@ setlimit f s
 -- by a single move on the given character.
 onemove :: Ord a => Nfa a -> Char -> Set a -> Set a
 
-onemove (NFA states moves start term) c x
+onemove (NFA _ moves _ _) c x
       = Set.fromList [ s | t <- Set.toList x ,
                       Move z d s <- Set.toList moves ,
                       z==t , c==d ]
@@ -58,10 +57,10 @@ onetrans :: Ord a => Nfa a -> Char -> Set a -> Set a
 
 onetrans mach c x = closure mach (onemove mach c x)
 
--- | 'alphabet' returns the alphabet of the machine, by finding a list of
+-- | 'alphabetNFA' returns the alphabet of the machine, by finding a list of
 --   the characters mentioned in the Moves.
-alphabet :: Nfa a -> [Char]
+alphabetNFA :: Nfa a -> [Char]
 
-alphabet (NFA s moves st f)
-  = nub [ c | Move s c t <- Set.toList moves ]
+alphabetNFA (NFA _ moves _ _)
+  = nub [ c | Move _ c _ <- Set.toList moves ]
 

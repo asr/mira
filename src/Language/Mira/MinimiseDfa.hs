@@ -18,7 +18,6 @@ module Language.Mira.MinimiseDfa where
 import qualified Data.Set as Set
 import Data.Set ( Set, member )
 
-import Language.Mira.RegExp
 import Language.Mira.NfaTypes
 
 --------------------------------------------------------------------------
@@ -47,7 +46,7 @@ minimise mach = replace mini mach
                 eqclass a = case [ b | b <- Set.toList classes , a `member` b ] of
                             []    -> error "minimise eqclass"
                             (x:_) -> x
-                (classes,fun) = eqclasses mach
+                (classes, _) = eqclasses mach
 
 --------------------------------------------------------------------------
 --                                                                      --
@@ -88,7 +87,7 @@ part f = foldr (addtoclass f) []
 
 addtoclass :: (a -> a -> Bool) -> a -> [[a]] -> [[a]]
 
-addtoclass f a []    = [[a]]
+addtoclass _ a []    = [[a]]
 
 addtoclass f a (c:r)
   | (f a (head c))    = (a:c):r
@@ -149,9 +148,9 @@ eqclasses mach
 
           firstpartfun a b = ( (a `member` finish) == (b `member` finish) )
 
-          (NFA states moves startst finish) = mach
+          (NFA states moves _ finish) = mach
 
-          step ( part , partfun )
+          step ( _, partfun )
                   = ( newpart , newpartfun )
                     where
                     newpart = partition newpartfun states
@@ -167,7 +166,7 @@ eqclasses mach
             | otherwise = to_limit f next
               where
               next = f (a,b)
-              (a',b') = next
+              (a', _) = next
 
           eqpart a a' = and ( Set.toList (Set.map (setmemSet a') a) ) &&
                         and ( Set.toList (Set.map (setmemSet a) a') )
